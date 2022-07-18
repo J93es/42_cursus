@@ -12,17 +12,17 @@
 
 #include "libft.h"
 
-static int	ft_custom_return(unsigned long num,
+static int	ft_atoi_return(unsigned long num,
 		long plma, const char *str, int cnt)
 {
 	if (cnt > 18)
 	{
 		if (plma == 1 && ft_strncmp(str, "9223372036854775807", 20) > 0)
 			return (-1);
-		if (plma == -1 && ft_strncmp(str, "-9223372036854775808", 21) > 0)
+		if (plma == -1 && ft_strncmp(str, "9223372036854775808", 20) > 0)
 			return (0);
 	}
-	return ((int)num * (int)plma);
+	return ((int)plma * (int)num);
 }
 
 int	ft_atoi(const char *str)
@@ -42,12 +42,11 @@ int	ft_atoi(const char *str)
 			plma = -1;
 	while (*str == '0')
 		str++;
-	while (*str != 0 && '0' <= *str && *str <= '9')
+	while ('0' <= *(str + cnt) && *(str + cnt) <= '9')
 	{
-		num = 10 * num + *str++ - '0';
+		num = 10 * num + *(str + cnt++) - '0';
 		if (cnt > 18)
 			break ;
-		cnt++;
 	}
-	return (ft_custom_return(num, plma, str, cnt));
+	return (ft_atoi_return(num, plma, str, cnt));
 }
