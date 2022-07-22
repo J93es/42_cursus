@@ -4,7 +4,7 @@
 typedef struct s_lst
 {
 	int		lst_fd;
-	char	*buf;
+	char	**buf;
 	struct s_lst	*next;	
 }	t_lst;
 
