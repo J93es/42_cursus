@@ -31,17 +31,6 @@ static size_t	ft_totalsize(char const *s, char const c)
 	return (total_str);
 }
 
-static int	ft_freeall(char **dst, size_t dst_spos)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < dst_spos)
-		free (dst[i++]);
-	free(dst);
-	return (0);
-}
-
 static int	ft_strset(char **dst, char const *s, char c, size_t dst_strpos)
 {
 	size_t	i;
@@ -53,7 +42,14 @@ static int	ft_strset(char **dst, char const *s, char c, size_t dst_strpos)
 		size++;
 	dst[dst_strpos] = (char *)malloc(size + 1);
 	if (dst[dst_strpos] == 0)
-		return (ft_freeall(dst, dst_strpos));
+	{
+		i = 0;
+		while (i < dst_strpos)
+			free (dst[i] = 0);
+		free(dst = 0);
+		dst = 0;
+		return (0);
+	}
 	while (*(s + i) != 0 && *(s + i) != c)
 	{
 		*(dst[dst_strpos] + i) = *(s + i);
@@ -68,10 +64,9 @@ char	**ft_split(char const *s, char c)
 	char	**dst;
 	size_t	dst_strpos;
 
-	dst = 0;
-	dst_strpos = 0;
 	if (s == 0)
 		return (0);
+	dst_strpos = 0;
 	dst = (char **)malloc(sizeof(char *) * (ft_totalsize(s, c) + 1));
 	if (dst == 0)
 		return (0);

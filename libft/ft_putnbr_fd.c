@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <unistd.h>
 
 static int	ft_finddigit(int n)
 {
@@ -29,10 +29,11 @@ static int	ft_finddigit(int n)
 	return (digit);
 }
 
-static char	*ft_itoa_custom(char *dst, int n)
+void	ft_putnbr_fd(int n, int fd)
 {
 	int		digit;
 	long	num;
+	char	dst[21];
 
 	digit = ft_finddigit(n);
 	num = (long)n;
@@ -49,16 +50,8 @@ static char	*ft_itoa_custom(char *dst, int n)
 		*(dst + digit--) = num % 10 + '0';
 		num /= 10;
 	}
-	return (dst);
-}
-
-void	ft_putnbr_fd(int n, int fd)
-{
-	int		i;
-	char	dst[21];
-
-	i = 0;
-	while (i < 21)
-		dst[i++] = 0;
-	ft_putstr_fd(ft_itoa_custom(dst, n), fd);
+	digit = 0;
+	while (*(dst +  digit) != 0)
+		if (write(fd, dst + digit++, 1) == 0)
+			write(fd, dst + digit - 1, 1);
 }

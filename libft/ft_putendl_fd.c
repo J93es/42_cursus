@@ -10,10 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <stddef.h>
+#include <unistd.h>
 
 void	ft_putendl_fd(char *s, int fd)
 {
-	ft_putstr_fd(s, fd);
-	ft_putchar_fd('\n', fd);
+	size_t	len;
+
+	len = 0;
+	while (*(s + len) != 0)
+		len++;
+	if (s != 0)
+		write(fd, s, len);
+	write(fd, "\n", 1);
 }

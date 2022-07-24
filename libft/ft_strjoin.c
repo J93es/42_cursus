@@ -11,24 +11,30 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "libft.h"
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*dst;
+	char	*ptr;
 	size_t	s1_len;
 	size_t	s2_len;
-	size_t	dst_len;
 
-	dst_len = 0;
+	s1_len = 0;
+	s2_len = 0;
 	if (s1 == 0 || s2 == 0)
 		return (0);
-	s1_len = ft_strlen(s1);
-	s2_len = ft_strlen(s2);
+	while (*(s1 + s1_len) != 0)
+		s1_len++;
+	while (*(s2 + s2_len) != 0)
+		s2_len++;
 	dst = (char *)malloc(s1_len + s2_len + 1);
 	if (dst == 0)
 		return (0);
-	dst_len = ft_strlcpy(dst, s1, dst_len + s1_len + 1);
-	ft_strlcat(dst, s2, dst_len + s2_len + 1);
+	ptr = dst;
+	while (s1_len-- > 0)
+		*ptr++ = *s1++;
+	while (s2_len-- > 0)
+		*ptr++ = *s2++;
+	*ptr = 0;
 	return (dst);
 }

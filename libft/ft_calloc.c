@@ -11,12 +11,12 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "libft.h"
 
 void	*ft_calloc(size_t count, size_t size)
 {
-	void	*ptr;
-	size_t	len;
+	void			*b;
+	size_t			len;
+	unsigned char	*ptr;
 
 	if (count == 0 || size == 0)
 	{
@@ -26,9 +26,11 @@ void	*ft_calloc(size_t count, size_t size)
 	len = count * size;
 	if (len / count != size || len % size != 0)
 		return (0);
-	ptr = (void *)malloc(count * size);
-	if (ptr == 0)
+	b = (void *)malloc(len);
+	if (b == 0)
 		return (0);
-	ft_bzero(ptr, count * size);
-	return (ptr);
+	ptr = (unsigned char *)b;
+	while (len-- > 0)
+		*ptr++ = 0;
+	return (b);
 }
