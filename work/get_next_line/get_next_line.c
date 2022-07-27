@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include "get_next_line.h"
 
-static void	*gnl_free(char **ptr)
+static void	*ft_free(char **ptr)
 {
 	if (*ptr == 0)
 		return (0);
@@ -18,14 +18,14 @@ static char	*ft_trim_tail(char *new_line, char m_status[1])
 
 	i = 0;
 	if (new_line[0] == 0)
-		return(gnl_free(&new_line));
+		return(ft_free(&new_line));
 	while (new_line[i] != 0 && new_line[i] != '\n')
 		i++;
 	str = (char *)malloc(i + 2);
 	if (str == 0)
 	{
 		*m_status = GNL_M_ERROR;
-		return (gnl_free(&new_line));
+		return (ft_free(&new_line));
 	}
 	i = 0;
 	while (new_line[i] != 0 && new_line[i] != '\n')
@@ -36,7 +36,7 @@ static char	*ft_trim_tail(char *new_line, char m_status[1])
 	if (new_line[i] == '\n')
 		str[i++] = '\n';
 	str[i] = 0;
-	gnl_free(&new_line);
+	ft_free(&new_line);
 	return (str);
 }
 
@@ -49,14 +49,14 @@ static char	*ft_trim_head(char *buf, char m_status[1])
 	while (buf[i] != 0 && buf[i] != '\n')
 		i++;
 	if (buf[i] == 0)
-		return (gnl_free(&buf));
+		return (ft_free(&buf));
 	new_buf = ft_strdup(ft_strchr(buf, '\n') + 1);
 	if (new_buf == 0)
 	{
 		*m_status = GNL_M_ERROR;
-		return (gnl_free(&buf));
+		return (ft_free(&buf));
 	}
-	gnl_free(&buf);
+	ft_free(&buf);
 	return (new_buf);
 }
 
@@ -67,7 +67,7 @@ static char	*ft_handle_read(int fd, char *buf)
 
 	str = (char *)malloc(BUFFER_SIZE + 1);
 	if (str == 0)
-		return (gnl_free(&buf));
+		return (ft_free(&buf));
 	rd_bytes = 1;
 	while (ft_strchr(buf, '\n') == 0 && rd_bytes > 0)
 	{
@@ -75,15 +75,15 @@ static char	*ft_handle_read(int fd, char *buf)
 		if (rd_bytes < 0)
 		{
 			if (buf != 0)
-				gnl_free(&buf);
-			return(gnl_free(&str));
+				ft_free(&buf);
+			return(ft_free(&str));
 		}
 		str[rd_bytes] = 0;
 		buf = ft_strjoin(buf, str);
 		if (buf == 0)
-			return(gnl_free(&str));
+			return(ft_free(&str));
 	}
-	gnl_free(&str);
+	ft_free(&str);
 	return (buf);
 }
 
@@ -101,12 +101,12 @@ char	*get_next_line(int fd)
 		return (0);
 	new_line = ft_strdup(buf);
 	if (new_line == 0)
-		return (gnl_free(&buf));
+		return (ft_free(&buf));
 	buf = ft_trim_head(buf, status);
 	if (*status == GNL_M_ERROR)
-		return (gnl_free(&new_line));
+		return (ft_free(&new_line));
 	new_line = ft_trim_tail(new_line, status);
 	if (*status == GNL_M_ERROR)
-		return (gnl_free(&buf));
+		return (ft_free(&buf));
 	return (new_line);
 }

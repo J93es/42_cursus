@@ -7,7 +7,6 @@
 #  define GNLB_STATUS
 #  define GNLB_NORMAL 0
 #  define GNLB_M_ERROR 1
-#  define GNLB_RD_ERROR 3
 # endif
 
 char	*get_next_line(int fd);

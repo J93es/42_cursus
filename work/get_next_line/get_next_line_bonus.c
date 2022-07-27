@@ -3,53 +3,36 @@
 #include <limits.h>
 #include "get_next_line_bonus.h"
 
-#if OPEN_MAX > 100000
-#define MAX 100000
+#if OPEN_MAX > 50000
+#define GNLB_MAX_FD 50000
 #else
-#define MAX OPEN_MAX
+#define GNLB_MAX_FD OPEN_MAX
 #endif
 
-static void	*gnl_free(char **ptr, int status)
+static void	*ft_free(char **ptr)
 {
-	long	i;
-
-	i = -1;
-	if (ptr == 0)
+	if (*ptr == 0)
 		return (0);
-	if (status == GNLB_NORMAL)
-	{
-		if (*ptr == 0)
-			return (0);
-		free(*ptr);
-		*ptr = 0;
-	}
-	if (status == GNLB_M_ERROR)
-	{
-		while (++i < MAX + 2)
-			if (ptr[i] != 0)
-			{
-				free(ptr[i]);
-				ptr[i] = 0;
-			}
-	}
+	free(*ptr);
+	*ptr = 0;
 	return (0);
 }
 
-static char	*ft_trim_tail(char *new_line, char status[1])
+static char	*ft_trim_tail(char *new_line, char m_status[1])
 {
 	int		i;
 	char	*str;
 
 	i = 0;
 	if (new_line[0] == 0)
-		return(gnl_free(&new_line, GNLB_NORMAL));
+		return(ft_free(&new_line));
 	while (new_line[i] != 0 && new_line[i] != '\n')
 		i++;
 	str = (char *)malloc(i + 2);
 	if (str == 0)
 	{
-		*status = GNLB_M_ERROR;
-		return (gnl_free(&new_line, GNLB_NORMAL));
+		*m_status = GNLB_M_ERROR;
+		return (ft_free(&new_line));
 	}
 	i = 0;
 	while (new_line[i] != 0 && new_line[i] != '\n')
@@ -60,11 +43,11 @@ static char	*ft_trim_tail(char *new_line, char status[1])
 	if (new_line[i] == '\n')
 		str[i++] = '\n';
 	str[i] = 0;
-	gnl_free(&new_line, GNLB_NORMAL);
+	ft_free(&new_line);
 	return (str);
 }
 
-static char	*ft_trim_head(char *buf, char status[1])
+static char	*ft_trim_head(char *buf, char m_status[1])
 {
 	int		i;
 	char	*new_buf;
@@ -73,41 +56,41 @@ static char	*ft_trim_head(char *buf, char status[1])
 	while (buf[i] != 0 && buf[i] != '\n')
 		i++;
 	if (buf[i] == 0)
-		return (gnl_free(&buf, GNLB_NORMAL));
+		return (ft_free(&buf));
 	new_buf = ft_strdup(ft_strchr(buf, '\n') + 1);
 	if (new_buf == 0)
 	{
-		*status = GNLB_M_ERROR;
-		return (gnl_free(&buf, GNLB_NORMAL));
+		*m_status = GNLB_M_ERROR;
+		return (ft_free(&buf));
 	}
-	gnl_free(&buf, GNLB_NORMAL);
+	ft_free(&buf);
 	return (new_buf);
 }
 
-static char	*ft_handle_read(int fd, char *buf, char status[1])
+static char	*ft_handle_read(int fd, char *buf)
 {
 	char	*str;
 	int		rd_bytes;
 
 	str = (char *)malloc(BUFFER_SIZE + 1);
-	if (str == 0 && (*status = GNLB_M_ERROR) != -1)
-		return (gnl_free(&buf, GNLB_NORMAL));
+	if (str == 0)
+		return (ft_free(&buf));
 	rd_bytes = 1;
 	while (ft_strchr(buf, '\n') == 0 && rd_bytes > 0)
 	{
 		rd_bytes = read(fd, str, BUFFER_SIZE);
-		if (rd_bytes < 0 && (*status = GNLB_RD_ERROR) != -1)
+		if (rd_bytes < 0)
 		{
 			if (buf != 0)
-				gnl_free(&buf, GNLB_NORMAL);
-			return(gnl_free(&str, GNLB_NORMAL));
+				ft_free(&buf);
+			return(ft_free(&str));
 		}
 		str[rd_bytes] = 0;
 		buf = ft_strjoin(buf, str);
-		if (buf == 0 && (*status = GNLB_M_ERROR) != -1)
-			return(gnl_free(&str, GNLB_NORMAL));
+		if (buf == 0)
+			return(ft_free(&str));
 	}
-	gnl_free(&str, GNLB_NORMAL);
+	ft_free(&str);
 	return (buf);
 }
 
@@ -115,27 +98,22 @@ char	*get_next_line(int fd)
 {
 	char		status[1];
 	char		*new_line;
-	static char	*buf[MAX + 2];
+	static char	*buf[GNLB_MAX_FD + 1];
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, status, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > GNLB_MAX_FD)
 		return (0);
 	*status = GNLB_NORMAL;
-	buf[fd] = ft_handle_read(fd, buf[fd], status);
-	if (*status == GNLB_M_ERROR)
-		return (gnl_free(buf, GNLB_M_ERROR));
-	if (*status == GNLB_RD_ERROR)
+	buf[fd] = ft_handle_read(fd, buf[fd]);
+	if (buf[fd] == 0)
 		return (0);
 	new_line = ft_strdup(buf[fd]);
 	if (new_line == 0)
-		return (gnl_free(buf, GNLB_M_ERROR));
+		return (ft_free(&buf[fd]));
 	buf[fd] = ft_trim_head(buf[fd], status);
 	if (*status == GNLB_M_ERROR)
-	{
-		gnl_free(buf, GNLB_M_ERROR);
-		return (gnl_free(&new_line, GNLB_NORMAL));
-	}
+		return (ft_free(&new_line));
 	new_line = ft_trim_tail(new_line, status);
 	if (*status == GNLB_M_ERROR)
-		return (gnl_free(buf, GNLB_M_ERROR));
+		return (ft_free(&buf[fd]));
 	return (new_line);
 }
