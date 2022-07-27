@@ -1,13 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mijung <mijung@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/27 12:21:33 by mijung            #+#    #+#             */
+/*   Updated: 2022/07/27 12:22:46 by mijung           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include <unistd.h>
-#include <limits.h>
 #include "get_next_line_bonus.h"
-
-#if OPEN_MAX > 50000
-#define GNLB_MAX_FD 50000
-#else
-#define GNLB_MAX_FD OPEN_MAX
-#endif
 
 static void	*ft_free(char **ptr)
 {
@@ -25,7 +30,7 @@ static char	*ft_trim_tail(char *new_line, char m_status[1])
 
 	i = 0;
 	if (new_line[0] == 0)
-		return(ft_free(&new_line));
+		return (ft_free(&new_line));
 	while (new_line[i] != 0 && new_line[i] != '\n')
 		i++;
 	str = (char *)malloc(i + 2);
@@ -83,12 +88,12 @@ static char	*ft_handle_read(int fd, char *buf)
 		{
 			if (buf != 0)
 				ft_free(&buf);
-			return(ft_free(&str));
+			return (ft_free(&str));
 		}
 		str[rd_bytes] = 0;
 		buf = ft_strjoin(buf, str);
 		if (buf == 0)
-			return(ft_free(&str));
+			return (ft_free(&str));
 	}
 	ft_free(&str);
 	return (buf);

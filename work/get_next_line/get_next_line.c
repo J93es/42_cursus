@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mijung <mijung@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/27 12:13:11 by mijung            #+#    #+#             */
+/*   Updated: 2022/07/27 12:15:28 by mijung           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include <unistd.h>
 #include "get_next_line.h"
@@ -6,7 +18,7 @@ static void	*ft_free(char **ptr)
 {
 	if (*ptr == 0)
 		return (0);
-	free(*ptr);
+	free (*ptr);
 	*ptr = 0;
 	return (0);
 }
@@ -18,7 +30,7 @@ static char	*ft_trim_tail(char *new_line, char m_status[1])
 
 	i = 0;
 	if (new_line[0] == 0)
-		return(ft_free(&new_line));
+		return (ft_free(&new_line));
 	while (new_line[i] != 0 && new_line[i] != '\n')
 		i++;
 	str = (char *)malloc(i + 2);
@@ -76,12 +88,12 @@ static char	*ft_handle_read(int fd, char *buf)
 		{
 			if (buf != 0)
 				ft_free(&buf);
-			return(ft_free(&str));
+			return (ft_free(&str));
 		}
 		str[rd_bytes] = 0;
 		buf = ft_strjoin(buf, str);
 		if (buf == 0)
-			return(ft_free(&str));
+			return (ft_free(&str));
 	}
 	ft_free(&str);
 	return (buf);

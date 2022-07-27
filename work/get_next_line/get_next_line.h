@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mijung <mijung@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/27 12:24:18 by mijung            #+#    #+#             */
+/*   Updated: 2022/07/27 12:24:20 by mijung           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-#include <stddef.h>
+# include <stddef.h>
 
 # ifndef GNL_STATUS
 #  define GNL_STATUS
