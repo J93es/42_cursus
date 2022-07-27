@@ -18,6 +18,8 @@ void	ft_putendl_fd(char *s, int fd)
 	size_t	len;
 
 	len = 0;
+	if (s == 0 || fd < 0)
+		return ;
 	while (*(s + len) != 0)
 		len++;
 	if (s != 0)

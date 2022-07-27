@@ -36,13 +36,17 @@ char	*ft_strtrim(char const *s1, char const *set)
 	i = 0;
 	head_index = 0;
 	tail_index = 0;
-	while (*(s1 + head_index) != 0 && ft_char_in_set(*(s1 + head_index), set) == 1)
+	if (s1 == 0)
+		return (0);
+	while (*(s1 + head_index) != 0
+		&& ft_char_in_set(*(s1 + head_index), set) == 1)
 		head_index++;
 	while (*(s1 + tail_index) != 0)
 		tail_index++;
-	while (tail_index > head_index && ft_char_in_set(*(s1 + tail_index - 1), set) == 1)
+	while (tail_index > head_index
+		&& ft_char_in_set(*(s1 + tail_index - 1), set) == 1)
 		tail_index--;
-	dst = (char*)malloc(sizeof(*s1) * (tail_index - head_index + 1));
+	dst = (char *)malloc(sizeof(*s1) * (tail_index - head_index + 1));
 	if (dst == 0)
 		return (0);
 	while (head_index < tail_index)

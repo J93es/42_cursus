@@ -78,18 +78,18 @@ static char	*ft_handle_read(int fd, char *buf)
 	int		rd_bytes;
 
 	str = (char *)malloc(BUFFER_SIZE + 1);
-	if (str == 0)
+	if (str == 0 && buf != 0)
 		return (ft_free(&buf));
+	if (str == 0)
+		return (0);
 	rd_bytes = 1;
 	while (ft_strchr(buf, '\n') == 0 && rd_bytes > 0)
 	{
 		rd_bytes = read(fd, str, BUFFER_SIZE);
+		if (rd_bytes < 0 && ft_free(&str) == 0 && buf != 0)
+			return (ft_free(&buf));
 		if (rd_bytes < 0)
-		{
-			if (buf != 0)
-				ft_free(&buf);
-			return (ft_free(&str));
-		}
+			return (0);
 		str[rd_bytes] = 0;
 		buf = ft_strjoin(buf, str);
 		if (buf == 0)

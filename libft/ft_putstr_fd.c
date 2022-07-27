@@ -14,6 +14,8 @@
 
 void	ft_putstr_fd(char *s, int fd)
 {
+	if (s == 0 || fd < 0)
+		return ;
 	while (*s != 0)
 		if (write(fd, s++, 1) == 0)
 			write(fd, s - 1, 1);

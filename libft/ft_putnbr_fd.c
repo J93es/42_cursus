@@ -35,6 +35,8 @@ void	ft_putnbr_fd(int n, int fd)
 	long	num;
 	char	dst[21];
 
+	if (fd < 0)
+		return ;
 	digit = ft_finddigit(n);
 	num = (long)n;
 	if (n == 0)
@@ -51,7 +53,7 @@ void	ft_putnbr_fd(int n, int fd)
 		num /= 10;
 	}
 	digit = 0;
-	while (*(dst +  digit) != 0)
+	while (*(dst + digit) != 0)
 		if (write(fd, dst + digit++, 1) == 0)
 			write(fd, dst + digit - 1, 1);
 }

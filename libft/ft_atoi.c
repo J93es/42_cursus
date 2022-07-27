@@ -12,41 +12,30 @@
 
 #include "libft.h"
 
-static int	ft_atoi_return(unsigned long num,
-		long plma, const char *str, int cnt)
-{
-	if (cnt > 18)
-	{
-		if (plma == 1 && ft_strncmp(str, "9223372036854775807", 20) > 0)
-			return (-1);
-		if (plma == -1 && ft_strncmp(str, "9223372036854775808", 20) > 0)
-			return (0);
-	}
-	return ((int)plma * (int)num);
-}
-
 int	ft_atoi(const char *str)
 {
-	int				cnt;
-	long			plma;
+	int				n;
+	long			p;
 	unsigned long	num;
 
-	cnt = 0;
-	plma = 1;
+	n = 0;
+	p = 1;
 	num = 0;
 	while (*str != 0 && (*str == '\t' || *str == '\n' || *str == '\v'
 			|| *str == '\f' || *str == '\r' || *str == ' '))
 		str++;
 	if (*str == '+' || *str == '-')
 		if (*str++ == '-')
-			plma = -1;
+			p = -1;
 	while (*str == '0')
 		str++;
-	while ('0' <= *(str + cnt) && *(str + cnt) <= '9')
+	while ('0' <= *(str + n) && *(str + n) <= '9')
 	{
-		num = 10 * num + *(str + cnt++) - '0';
-		if (cnt > 18)
-			break ;
+		num = 10 * num + *(str + n++) - '0';
+		if (n > 18 && p > 0 && ft_strncmp(str, "9223372036854775807", 19) > 0)
+			return (-1);
+		if (n > 18 && p < 0 && ft_strncmp(str, "9223372036854775808", 19) > 0)
+			return (0);
 	}
-	return (ft_atoi_return(num, plma, str, cnt));
+	return ((int)p * (int)num);
 }
