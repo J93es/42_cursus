@@ -6,7 +6,7 @@
 /*   By: mijung <mijung@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 12:13:11 by mijung            #+#    #+#             */
-/*   Updated: 2022/07/27 12:15:28 by mijung           ###   ########.fr       */
+/*   Updated: 2022/07/27 19:15:30 by mijung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	*get_next_line(int fd)
 	char		*new_line;
 	static char	*buf;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, status, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
 	*status = GNL_NORMAL;
 	buf = ft_handle_read(fd, buf);
