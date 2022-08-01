@@ -1,25 +1,25 @@
 #include <unistd.h>
 
-void	ft_putnbr_base_fd(int n, unsigned int base, int fd)
+void	ft_putnbr_base_fd(int n, unsigned int base, int fd, char *base_str)
 {
-	char			c;
 	unsigned int	num;
 
-	num = (unsigned int)n;
 	if (fd < 0)
 		return ;
 	if (n == 0)
-		write (1, "0", fd);
+		write (fd, "0", 1);
 	if (n < 0)
 	{
 		num = (unsigned int)(-1 * n);
-		write (1, "-", fd);
+		write (fd, "-", 1);
 	}
+	else
+		num = (unsigned int)n;
 	if (num > 0)
 	{
 		if (num / base > 0)
-			ft_putnbr_base_fd((int)(num / base), base, fd);
-		c = "0123456789abcdef"[num % base];
-		write(1, &c, fd);
+			ft_putnbr_base_fd((int)(num / base), base,
+			fd, base_str);
+		write(fd, &base_str[num % base], 1);
 	}
 }
