@@ -12,48 +12,26 @@
 
 #include <unistd.h>
 
-static int	ft_finddigit(int n)
-{
-	int	digit;
-
-	digit = 0;
-	if (n == 0)
-		return (1);
-	if (n < 0)
-		digit++;
-	while (n != 0)
-	{
-		n /= 10;
-		digit++;
-	}
-	return (digit);
-}
-
 void	ft_putnbr_fd(int n, int fd)
 {
-	int		digit;
+	char	c;
 	long	num;
-	char	dst[21];
 
+	num = (long)n;
 	if (fd < 0)
 		return ;
-	digit = ft_finddigit(n);
-	num = (long)n;
-	if (n == 0)
-		*dst = '0';
-	if (n < 0)
+	if (num == 0)
+		write (1, "0", fd);
+	if (num < 0)
 	{
 		num *= -1;
-		*dst = '-';
+		write (1, "-", fd);
 	}
-	*(dst + digit--) = 0;
-	while (num > 0)
+	if (num > 0)
 	{
-		*(dst + digit--) = num % 10 + '0';
-		num /= 10;
+		if (num / 10 > 0)
+			ft_putnbr_fd((int)(num / 10), fd);
+		c = num % 10 + '0';
+		write(1, &c, fd);
 	}
-	digit = 0;
-	while (*(dst + digit) != 0)
-		if (write(fd, dst + digit++, 1) == 0)
-			write(fd, dst + digit - 1, 1);
 }
